@@ -26,10 +26,9 @@ return(
         ?(cart.reduce((acc , i )=>{
           
           return(
-            acc += i.price
-          
-            )
-        
+            acc += (i.price*i.count)
+          )
+
           },0)):null
       }</h1> 
 

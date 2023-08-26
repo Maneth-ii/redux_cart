@@ -9,10 +9,22 @@ const cartSlice = createSlice({
     reducers:{
         addItem:{
             reducer:(state, action) => {
-                state.push(action.payload);
+                const id = action.payload.id;
+                const tempObject = state.find((ele) =>{
+                    return ele.id === id;
+                })
+
+                if(tempObject){
+                    tempObject.count += 1;
+                }
+                else{
+                    state.push(action.payload);
+                }
+
             },
             prepare:(id ,price, ram , cpu) =>({
                 payload:{
+                    count:1,
                     id,
                     price,
                     ram,
