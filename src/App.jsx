@@ -1,35 +1,51 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useDispatch, useSelector } from "react-redux";
+import { selectLaptops } from "./store/reducers/laptopSlice";
+import { addItem, selectCart } from "./store/reducers/cartSlice";
 
-function App() {
-  const [count, setCount] = useState(0)
+function App(){
 
-  return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+  const dispatch = useDispatch();
+  const laptops = useSelector(selectLaptops);
+  const cart = useSelector(selectCart)
+
+  const cartLength = cart.length
+return(
+  <>
+    <ul>
+      {laptops.map(({id,price,ram,cpu}) => <li>Rs.{price} | {"RAM :"+ram} | {"CPU: "+ cpu} {"     "} <button 
+      className="add--to--cart"
+      onClick={() => dispatch(addItem(id,price,ram,cpu))}
+      >Add To Cart</button> </li>)}
+    
+    </ul>
+
+    <div className="cart">
+      <h1 className="cart--title">Cart <span>{cartLength}</span></h1>
+      <h1 className="cart--title">Total: Rs.{
+        cartLength > 0
+        ?(cart.reduce((acc , i )=>{
+          
+          return(
+            acc += i.price
+          
+            )
+        
+          },0)):null
+      }</h1> 
+
+        {cart?.map(({price}) => {
+            return(
+              <div>
+                <h4>
+                  {price}
+                </h4>
+              </div>
+            )
+          })
+        }
+    </div>
+  </>
+)
 }
 
-export default App
+export default App;
